@@ -1,4 +1,5 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin'); //installed via npm
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require('path');
 
 module.exports = {
@@ -7,15 +8,23 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.[hash].js',
   },
-  mode: 'development',
+  mode: 'production',
   module: {
     rules: [
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
+      {
+        test: /\.(png|jpg)/,
+        type: 'asset/resource'
+      }
     ],
   },
-  plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
+  plugins: [
+    new HtmlWebpackPlugin({ template: './src/index.html' }),
+    new MiniCssExtractPlugin({ filename: 'index.[hash].css' }),
+  ],
+  devtool: 'source-map',
 
 };
